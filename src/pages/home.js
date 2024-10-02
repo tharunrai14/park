@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
@@ -8,6 +8,7 @@ import { GiFallingStar } from "react-icons/gi";
 import { IoCarSportSharp } from "react-icons/io5";
 
 import '../index.css';
+
 const HomePage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth0();
@@ -15,59 +16,55 @@ const HomePage = () => {
   const user = useAuth0();
   const [message, setMessage] = useState('');
   const [verified, setVerified] = useState(false);
-  
+  const [errorMessage, setErrorMessage] = useState(''); // To store error messages
 
-   useEffect(() => {
-
-    async function checkverify(){
-          try{  if(user.user.email){
-        const response =await fetch('https://park-book-9f9254d7f86a.herokuapp.com/api/isverified', {
-            method: 'POST',
+  useEffect(() => {
+    async function checkverify() {
+      try {
+        if (user.user.email) {
+          const response = await fetch('https://park-server.onrender.com/api/check-verification', {
+            method: 'POST', // Use POST here
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: user.user.email })
-        });
-        const data = await response.json();
-        console.log(data);
-        if (data.isverified===true) {
-           
+            body: JSON.stringify({ email: user.user.email }) // Send email in body
+          });
+          const data = await response.json();
+          console.log(data);
+          if (data.verified === true) { // Check for verified status
             setVerified(true);
-
-        }
-        else {
-        
+            setErrorMessage(''); // Clear any error message
+          } else {
             setVerified(false);
-            
+            setErrorMessage(data.message); // Set error message from backend
+          }
         }
-    
-        }}catch(error){
-            console.error('Failed to verify:', error);
-        }
-   
-      
-        
-    }  checkverify();}
-        , [user.user.email]);
+      } catch (error) {
+        console.error('Failed to verify:', error);
+        setErrorMessage('An error occurred during verification.');
+      }
+    }
+    checkverify();
+  }, [user.user.email]);
+
   const handleNavigation = (path) => {
     navigate(path);
     setIsNavOpen(false);
   };
-function handlebook(e){
-  e.preventDefault();
-  if(verified){
-     navigate('/book');
-  }
- 
-  else
-  setMessage('Please verify your phone number to book a slot');
-}
 
+  function handlebook(e) {
+    e.preventDefault();
+    if (verified) {
+      navigate('/book');
+    } else {
+      setMessage(errorMessage || 'Please verify your phone number to book a slot');
+    }
+  }
 
   return (
     <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12 bg-primary text-white">
       <Profile />
 
       {/* Navigation bar */}
-      <div className="px-4 py-2 shadow-lg bg-gray-800 flex items-center justify-between">
+      <div className="px-4 py-2 shadow-lg bg-gray-800 flex items-center justify-between mb-4">
         <img src="https://th.bing.com/th/id/OIP.yat3HsshdS-vQTir3a4xLAAAAA?rs=1&pid=ImgDetMain" alt="Logo" className="h-8 w-auto" />
         
         <div className="md:hidden">
@@ -77,15 +74,18 @@ function handlebook(e){
         </div>
 
         <div className="hidden md:flex space-x-4">
-          {[ 'admin',  'history','verify'].map((item) => (
-            <button onClick={() => handleNavigation(`/${item}`)} className="bg-gray-700  hover:bg-[#864AF9] border-white hover:text-black text-gray-200 font-semibold py-2 px-4 rounded">
+          {['admin', 'history', 'verify'].map((item) => (
+            <button 
+              key={item} 
+              onClick={() => handleNavigation(`/${item}`)} 
+              className="bg-gray-700 hover:bg-[#864AF9] border-white hover:text-black text-gray-200 font-semibold py-2 px-4 rounded"
+            >
               {item.charAt(0).toUpperCase() + item.slice(1)}
             </button>
           ))}
           <button onClick={() => logout({ returnTo: window.location.origin })} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
             Log Out
           </button>
-
         </div>
       </div>
 
@@ -96,8 +96,12 @@ function handlebook(e){
             <button onClick={() => setIsNavOpen(false)} className="text-gray-300">
               <FaTimes size={24} />
             </button>
-            {[ 'admin', 'history','verify'].map((item) => (
-              <button onClick={() => handleNavigation(`/${item}`)} className="block mt-4 text-gray-200 font-bold py-2 px-4 hover:bg-white-700 hover:text-black rounded">
+            {['admin', 'history', 'verify'].map((item) => (
+              <button 
+                key={item} 
+                onClick={() => handleNavigation(`/${item}`)} 
+                className="block mt-4 text-gray-200 font-bold py-2 px-4 hover:bg-white-700 hover:text-black rounded"
+              >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </button>
             ))}
@@ -128,8 +132,9 @@ function handlebook(e){
                     </select>
                   </div>
                   <div className="mt-6">
-                    <button  onClick={handlebook} className="w-full mr-auto px-4 py-2 font-bold  bg-indigo-600 hover:bg-indigo-700 rounded-md focus:outline-none flex justify-center items-center">Book a parking space <FaRegArrowAltCircleRight size={25} className='ml-1' /></button>
-                  
+                    <button onClick={handlebook} className="w-full mr-auto px-4 py-2 font-bold bg-indigo-600 hover:bg-indigo-700 rounded-md focus:outline-none flex justify-center items-center">
+                      Book a parking space <FaRegArrowAltCircleRight size={25} className='ml-1' />
+                    </button>
                   </div>
                   {message && <p className="mt-4 text-red-600">{message}</p>}
                 </form>

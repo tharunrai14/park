@@ -16,7 +16,7 @@ const UserList = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`https://park-book-9f9254d7f86a.herokuapp.com/api/usersdet`);
+            const response = await fetch(`https://park-server.onrender.com/api/usersdet`);
             if (response.ok) {
                 const fetchedUsers = await response.json();
                 setUsers(fetchedUsers);

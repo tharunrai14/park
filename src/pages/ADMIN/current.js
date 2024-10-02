@@ -15,7 +15,7 @@ const Current = () => {
         async function fetchSlots() {
             try {
                 setLoading(true);
-                const url = `https://park-book-9f9254d7f86a.herokuapp.com/api/parkingSlots?bookedFrom=${bookedFrom}&bookedTill=${bookedTill}&type=${booking.vehicleType}`;
+                const url = `https://park-server.onrender.com/api/parkingSlots?bookedFrom=${bookedFrom}&bookedTill=${bookedTill}&type=${booking.vehicleType}`;
                 const response = await fetch(url);
                 const data = await response.json();
 
@@ -58,7 +58,7 @@ const Current = () => {
                     {loading ? "Refreshing..." : "Refresh"}
                 </button>
             </div>
-            <div className='grid grid-cols-8 gap-4'>
+            <div className='grid grid-cols-3 gap-4 sm:grid-cols-4 lg:grid-cols-8'>
                 {slots.map((slot) => (
                     <div
                         key={slot.slotId}

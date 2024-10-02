@@ -50,7 +50,7 @@ const Book = () => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch('https://park-book-9f9254d7f86a.herokuapp.com/api/prices');
+        const response = await fetch('https://park-server.onrender.com/api/prices');
         const data = await response.json();
         setCarprice(data[0].carprice);
         setBikeprice(data[0].bikeprice);
@@ -82,7 +82,7 @@ const Book = () => {
     async function checkverify() {
       try {
         if (user.user.email) {
-          const response = await fetch('https://park-book-9f9254d7f86a.herokuapp.com/api/isverified', {
+          const response = await fetch('https://park-server.onrender.com/api/isverified', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: user.user.email })
@@ -114,14 +114,14 @@ const Book = () => {
       }
       
       try {
-        const url = `https://park-book-9f9254d7f86a.herokuapp.com/api/parkingSlots?bookedFrom=${bookedFrom}&bookedTill=${bookedTill}&type=${booking.vehicleType}`;
+        const url = `https://park-server.onrender.com/api/parkingSlots?bookedFrom=${bookedFrom}&bookedTill=${bookedTill}&type=${booking.vehicleType}`;
         const response = await fetch(url);
         const data = await response.json();
 
         if (Array.isArray(data)) {
           const uniqueSlots = data.filter((slot, index, self) => self.findIndex(s => s.slotId === slot.slotId) === index);
           setSlots(uniqueSlots);
-          
+            
         }
       } catch (error) {
         console.error('Failed to fetch slots:', error);
@@ -188,7 +188,7 @@ const Book = () => {
   };
   const confirmBooking = async () => {
     setLoading(true);
-    const response = await fetch('https://park-book-9f9254d7f86a.herokuapp.com/api/bookings', {
+    const response = await fetch('https://park-server.onrender.com/api/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -381,7 +381,7 @@ const Book = () => {
               <label className="block text-sm font-medium text-gray-700">Select Slot</label>
               {!loading ? (
                 <div className="flex justify-center">
-                <div className=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-8 gap-4 mt-2 ">
+                <div className=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-2 ">
                   {currentSlots.map(slot => (
                     <div key={slot.slotId} onClick={() => handleSlotSelect(slot.slotId)}
                       className={`flex flex-col justify-center text-center items-center cursor-pointer p-4 w-24 h-22 sm:w-32 sm:h-32 md:w-32 md:h-32 ${slot.slotId === booking.slotId ? 'bg-[#3848b1] text-white border-2' : slot.isOccupied ? 'bg-red-100 text-white' : 'bg-3 text-white'} rounded-lg`}>

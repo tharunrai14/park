@@ -25,7 +25,7 @@ const Adminhist = () => {
     const fetchUserBookings = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`https://park-book-9f9254d7f86a.herokuapp.com/api/allBookings`);
+            const response = await fetch(`https://park-server.onrender.com/api/allBookings`);
             if (response.ok) {
                 const fetchedBookings = await response.json();
                 fetchedBookings.sort((a, b) => new Date(b.bookedFrom) - new Date(a.bookedFrom));
@@ -48,7 +48,7 @@ const Adminhist = () => {
             checkInTime.setHours(checkInTime.getHours() + 5);
             checkInTime.setMinutes(checkInTime.getMinutes() + 30);
             const trimdaytime = checkInTime.toISOString().slice(0, 19).replace('T', ' ');
-            const url = `https://park-book-9f9254d7f86a.herokuapp.com/api/check-in`;
+            const url = `https://park-server.onrender.com/api/check-in`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -123,7 +123,7 @@ const Adminhist = () => {
             checkOutTime.setHours(checkOutTime.getHours() + 5);
             checkOutTime.setMinutes(checkOutTime.getMinutes() + 30);
             const trimdaytime = checkOutTime.toISOString().slice(0, 19).replace('T', ' ');
-            const url = `https://park-book-9f9254d7f86a.herokuapp.com/api/check-out`;
+            const url = `https://park-server.onrender.com/api/check-out`;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {

@@ -13,7 +13,7 @@ const Main = () => {
     <div className="h-screen">
       <div className="flex flex-col h-screen bg-primary">
         <nav className="text-white py-4 px-8 flex justify-between items-center border-b border-gray-200">
-          <h1 className="text-4xl font-bold text-white fam">Parkbook</h1>
+          <h1 className="text-4xl font-bold text-white fam">ParkBook</h1>
           {isAuthenticated ? (
             <div className="flex items-center">
               <Profile />
@@ -45,7 +45,7 @@ const Main = () => {
               <span className="block sm:inline text-white "> to find a parking space.</span>
             </p>
             <p className="text-slate-300 text-center text-lg sm:text-xl font-semibold">
-              Welcome to <span className="name font-bold">Parkbook</span> - your ultimate solution for booking parking spots online. Book your spot with
+              Welcome to <span className="name font-bold">ParkBook</span> - your ultimate solution for booking parking spots online. Book your spot with
               <br className="hidden sm:block" />
               just one click! Our system offers a user-friendly interface for booking, accessing
               <br className="hidden sm:block" />
